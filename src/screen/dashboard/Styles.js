@@ -12,6 +12,13 @@ import {fontFamily} from '../../styleSheet/fonts';
 
 
 const Styles = StyleSheet.create({
+  title_indicator:{
+    flex: 1, 
+    paddingTop: 0, 
+    marginTop: 0,
+    backgroundColor: colors.white,  
+    flexDirection: flexVariable.columnReverse,
+  },
   viewContainer: {
     marginHorizontal: responsiveHorizontalSize(4),
     marginVertical: responsiveVerticalSize(2),
@@ -161,8 +168,20 @@ const Styles = StyleSheet.create({
     color: colors.black
   },
   txt_medium:{
-    fontSize: responsiveFontSize(15),
+    fontSize: responsiveFontSize(14),
     paddingHorizontal: responsiveHorizontalSize(2)
+  },
+  item_title:{
+    fontFamily: fontFamily.segoeuiRegular,
+    fontSize: responsiveFontSize(15),
+  },
+  active_item:{
+    color: colors.themeColor,
+    fontFamily: fontFamily.segoeuiBold,
+    fontSize: responsiveFontSize(14),
+  },
+  bg_themeColor:{
+    backgroundColor: colors.themeColor
   }
 });
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import GetSubjectService from '../api/Services/getSubjects';
 
 export const AppContext = React.createContext({});
 
@@ -8,7 +9,12 @@ export class AppProvider extends React.Component {
     this.state = {
       isLogin: false,
       token: '',
+      subjects: [],
     };
+  }
+
+  componentDidMount(){
+    this.getSubjects();
   }
 
   updateValue = (key, val) => {
@@ -20,6 +26,22 @@ export class AppProvider extends React.Component {
     this.setState({
       isLogin: false,
     });
+  };
+
+  getSubjects = async () => {
+      await GetSubjectService.getSubject().then(async result => {
+        if (result.status === 200) {
+          try {
+            this.setState({
+              subjects: result.data,
+            });
+          } catch (error) {
+            console.log('error', error);
+          }
+        } else {
+          console.log('Network failed');
+        }
+      });
   };
 
   render() {

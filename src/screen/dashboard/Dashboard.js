@@ -1,33 +1,29 @@
 import React, {useState, useContext, useEffect} from 'react';
+import {View, Text, Linking, Platform} from 'react-native';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  Linking,
-  Platform,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-  MenuProvider,
-} from 'react-native-popup-menu';
-
+  IndicatorViewPager,
+  PagerTitleIndicator,
+} from 'react-native-best-viewpager';
 import Styles from './Styles';
-import colors from '../../styleSheet/color';
 import GetFilesService from '../../api/Services/getFiles';
-import buttonStyles from '../../styleSheet/button';
-import {categoryData} from '../../utils/DropdownData';
+import {AppContext} from '../../layout/AppProvider';
+import CardView from '../../customComponent/CardView/CardView';
+import colors from '../../styleSheet/color';
 
 const Dashboard = ({navigation}) => {
   const [data, setData] = useState([]);
-  const [isPlay, setIsPlay] = useState(false);
+  const [subjectList, setSubjectList] = useState([]);
+  const [pageList,setPageList] = useState([]);
+  const appContext = React.useContext(AppContext);
 
   useEffect(() => {
     getAudioFiles();
+    setSubjectList(appContext.state.subjects);
+    let pageTitles;
+    if (appContext.state.subjects) {
+      pageTitles = appContext.state.subjects.map(item => item.subj_name);
+    }
+    setPageList(["All", ...pageTitles]);
   }, [getAudioFiles]);
 
   const getAudioFiles = async () => {
@@ -57,134 +53,32 @@ const Dashboard = ({navigation}) => {
     }
   };
 
-  // const handleOnSelect = (value) => {
-  //   console.log(value)
-  // }
+  const _renderTitleIndicator = () => {
+    return <PagerTitleIndicator titles={pageList} 
+    itemTextStyle={[Styles.item_title]} 
+    selectedBorderStyle={[Styles.bg_themeColor]}
+    trackScroll={true}
+    changePageWithAnimation={true}
+    selectedItemTextStyle={[Styles.active_item]}/>;
+  };
 
   return (
-    <MenuProvider>
-    <View style={[Styles.viewContainer]}>
-      <View style={[Styles.pb_2]}>
-        <Text style={[Styles.title_text]}>Student Queries</Text>
-      </View>
-      {data.length > 0 ? (
-        <View style={[Styles.listContatiner]}>
-          <FlatList
-            data={data}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item, index}) => {
-              return (
-                <View style={[Styles.card_container]} key={index}>
-                  <View style={[Styles.boxShadow]}>
-                    <View style={[Styles.fd_row, Styles.ph_2, Styles.pv_1]}>
-                      <View style={[Styles.gridSection]}>
-                        <View style={[Styles.fd_row, Styles.flex_1]}>
-                          <TouchableOpacity
-                            onPress={() =>
-                              navigation.navigate('AudioPlay', {
-                                fileURL: item.file_url,
-                              })
-                            }>
-                            <View
-                              style={[
-                                Styles.circle_container,
-                                Styles.border_width_2,
-                                [
-                                  item.status === '0'
-                                    ? Styles.pending_status
-                                    : Styles.completed_status,
-                                ],
-                              ]}>
-                              <Icon
-                                name={'file-audio'}
-                                size={22}
-                                color={colors.themeColor}
-                              />
-                            </View>
-                          </TouchableOpacity>
-                          <View style={[Styles.pl_2]}>
-                            <TouchableOpacity
-                              onPress={() =>
-                                navigation.navigate('AudioPlay', {
-                                  fileURL: item.file_url,
-                                })
-                              }>
-                              <Text style={[Styles.file_text]}>
-                                {`${item.file_name}`}
-                              </Text>
-                            </TouchableOpacity>
-                            <View
-                              style={[
-                                Styles.gridSection,
-                                Styles.fd_row,
-                                Styles.pt_1,
-                              ]}>
-                              <View>
-                                <TouchableOpacity>
-                                  <View
-                                    style={[buttonStyles.btn_small_Container]}>
-                                    <Text style={[buttonStyles.btn_small_text]}>
-                                      Complete
-                                    </Text>
-                                  </View>
-                                </TouchableOpacity>
-                              </View>
-                              <View style={[Styles.gridSection, Styles.pl_2]}>
-                                <TouchableOpacity
-                                  onPress={() => dialCall(item.mobile)}>
-                                  <View
-                                    style={[
-                                      Styles.phone_container,
-                                      Styles.circle_container,
-                                      Styles.phone_circle,
-                                    ]}>
-                                    <Icon
-                                      name="phone"
-                                      size={14}
-                                      color={colors.white}
-                                    />
-                                  </View>
-                                </TouchableOpacity>
-                              </View>
-                            </View>
-                          </View>
-                        </View>
-                      </View>
-                      <View style={[Styles.gridSection, Styles.phone_position]}>
-                        <View>
-                          <Menu>
-                            <MenuTrigger
-                              style={[Styles.dots]}>
-                              <Icon
-                                name="ellipsis-v"
-                                size={20}
-                                color={colors.dimGrey}
-                              />
-                            </MenuTrigger>
-                            <MenuOptions>
-                              {categoryData.map((item, index) => (
-                                <MenuOption onSelect={() => alert(item.value)}>
-                                  <Text
-                                    style={[Styles.text, Styles.txt_medium, item.key === 0 ? Styles.color_black: '']}>
-                                    {item.value}
-                                  </Text>
-                                </MenuOption>
-                              ))}
-                            </MenuOptions>
-                          </Menu>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              );
-            }}
-            keyExtractor={item => item.value}
-          />
-        </View>
-      ) : null}
+    <View style={{flex: 1}}>
+      <IndicatorViewPager
+        style={[Styles.title_indicator]}
+        indicator={_renderTitleIndicator()}>
+        {pageList.map((item, index) => (
+          <View>
+            <CardView
+              data={data}
+              dialCall={number => dialCall(number)}
+              navigation={navigation}
+              subjectList={subjectList}
+            />
+          </View>
+        ))}
+      </IndicatorViewPager>
     </View>
-    </MenuProvider>
   );
 };
 
