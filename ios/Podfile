@@ -83,6 +83,8 @@ target 'callrecord' do
 
   pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
 
+  pod 'RNVoiceRecorder', :path => '../node_modules/react-native-voice-recorder'
+
   target 'callrecordTests' do
     inherit! :complete
     # Pods for testing
