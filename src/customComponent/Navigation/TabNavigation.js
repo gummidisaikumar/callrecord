@@ -11,6 +11,7 @@ import {fontFamily} from '../../styleSheet/fonts';
 import AudioPlay from '../../screen/audioPlay/AudioPlay';
 import VoiceRecord from '../../screen/VoiceRecord/VoiceRecord';
 import Styles from './Styles';
+import { flexVariable } from '../../styleSheet/flexVariable';
 
 const DashboardStack = createStackNavigator();
 const ProfileStrack = createStackNavigator();
@@ -69,22 +70,22 @@ const TabNavigation = () => {
             return (
               <View
                 style={[Styles.tabs_circle]}>
-                <Icon name={iconName} size={40} color={colors.themeColor} />
+                  <Icon name={iconName} size={34} color={colors.themeColor} />
               </View>
             );
           } else {
             return <Icon name={iconName} size={24} color={color} />;
           }
-          // You can return any component that you like here!
         },
       })}
       tabBarOptions={{
-        activeTintColor: colors.grey,
+        activeTintColor: colors.black,
         inactiveTintColor: colors.dimGrey,
-        activeBackgroundColor: colors.themeColor,
+       // activeBackgroundColor: colors.themeColor,
         labelStyle: {
           fontSize: responsiveFontSize(14),
           fontFamily: fontFamily.segoeuiSemiBold,
+          fontWeight: flexVariable.bold
         },
       }}>
       <AuthStack.Screen name={'Dashboard'} component={DashboardStackScreen} />
