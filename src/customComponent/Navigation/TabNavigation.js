@@ -9,13 +9,13 @@ import colors from '../../styleSheet/color';
 import {responsiveFontSize} from '../../styleSheet/responsiveSize';
 import {fontFamily} from '../../styleSheet/fonts';
 import AudioPlay from '../../screen/audioPlay/AudioPlay';
-import VoiceRecord from '../../screen/VoiceRecord/VoiceRecord';
+import Queries from '../../screen/Queries/Queries';
 import Styles from './Styles';
 import { flexVariable } from '../../styleSheet/flexVariable';
 
 const DashboardStack = createStackNavigator();
 const ProfileStrack = createStackNavigator();
-const VoiceRecordStack = createStackNavigator();
+const QueriesStack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 const AuthStack = createStackNavigator();
 
@@ -31,13 +31,13 @@ const DashboardStackScreen = () => (
 );
 
 const VoiceRecordStackScreen = () => (
-  <VoiceRecordStack.Navigator
+  <QueriesStack.Navigator
     screenOptions={{
       headerTintColor: colors.white,
       headerStyle: {backgroundColor: colors.themeColor},
     }}>
-    <VoiceRecordStack.Screen name={'VoiceRecord'} component={VoiceRecord} />
-  </VoiceRecordStack.Navigator>
+    <QueriesStack.Screen name={'Record'} component={Queries} />
+  </QueriesStack.Navigator>
 );
 
 const ProfileStrackScreen = () => (
@@ -62,11 +62,11 @@ const TabNavigation = () => {
             iconName = focused ? 'home' : 'home';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'user' : 'user';
-          } else if (route.name === 'VoiceRecord') {
+          } else if (route.name === 'Record') {
             iconName = focused ? 'microphone' : 'microphone';
           }
 
-          if (route.name === 'VoiceRecord') {
+          if (route.name === 'Record') {
             return (
               <View
                 style={[Styles.tabs_circle]}>
@@ -90,7 +90,7 @@ const TabNavigation = () => {
       }}>
       <AuthStack.Screen name={'Dashboard'} component={DashboardStackScreen} />
       <AuthStack.Screen
-        name={'VoiceRecord'}
+        name={'Record'}
         component={VoiceRecordStackScreen}
       />
       <AuthStack.Screen name={'Profile'} component={ProfileStrackScreen} />

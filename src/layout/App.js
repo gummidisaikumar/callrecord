@@ -27,7 +27,7 @@ const App = () => {
       <StatusBar backgroundColor={colors.themeColor} />
       <AppContext.Consumer>
         {context =>
-          context.state.token ?(
+          !context.state.token ?(
             <NavigationContainer>
               <TabNavigation />
             </NavigationContainer>

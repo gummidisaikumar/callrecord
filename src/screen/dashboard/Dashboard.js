@@ -25,6 +25,7 @@ const Dashboard = ({navigation}) => {
     }
     setPageList(["All", ...pageTitles]);
   }, [getAudioFiles]);
+  
 
   const getAudioFiles = async () => {
     await GetFilesService.getFilesList().then(async result => {

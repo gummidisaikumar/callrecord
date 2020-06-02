@@ -47,6 +47,22 @@ const Styles = StyleSheet.create({
     color: colors.white,
     letterSpacing: responsiveFontSize(0.5)
   },
+  btn_transparent: {
+    flexDirection: flexVariable.column,
+    alignItems: flexVariable.center,
+    paddingHorizontal: responsiveHorizontalSize(1.5),
+    paddingVertical: responsiveVerticalSize(1.5),
+    borderRadius: responsiveHorizontalSize(1),
+    borderWidth: responsiveFontSize(1),
+    backgroundColor: colors.transparent,
+    borderColor: colors.themeColor,
+  },
+  btn_transparent_text:{
+    fontFamily: fontFamily.segoeuiSemiBold,
+    fontSize: responsiveFontSize(16),
+    color: colors.white,
+    letterSpacing: responsiveFontSize(0.5)
+  }
 });
 
 export default Styles;
