@@ -8,7 +8,7 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-
+import RNFS from 'react-native-fs';
 import Sound from 'react-native-sound';
 import application_Constants from '../../application_Constants/application_Constants';
 import Styles from './Styles';
@@ -73,24 +73,39 @@ class AudioPlay extends React.Component {
       this.sound.play(this.playComplete);
       this.setState({playState: 'playing'});
     } else {
-      const filepath = this.props.route.params.fileURL;
-      console.log('[Play]', filepath);
-
-      this.sound = new Sound(filepath, '', error => {
-        if (error) {
-          console.log('failed to load the sound', error);
-          //  Alert.alert('Notice', 'audio file error. (Error code : 1)');
-          this.setState({playState: 'paused'});
-        } else {
-          this.setState({
-            playState: 'playing',
-            duration: this.sound.getDuration(),
-          });
-          this.sound.play(this.playComplete);
-        }
-      });
+      const base64 = this.props.route.params.base64;
+      const name = this.props.route.params.fileName;
+      const path = RNFS.DocumentDirectoryPath + `/${name}`;
+      console.log('path', path);
+      if (RNFS.exists(path)) {
+        console.log('Exitspath', path);
+        this.playingAudio(path);
+      } else {
+        RNFS.writeFile(path, base64, 'base64').then(() => playSound());
+        const playSound = () => {
+          console.log('newpath', path);
+          this.playingAudio(path);
+        };
+      }
     }
   };
+
+  playingAudio = path => {
+    this.sound = new Sound(path, '', error => {
+      if (error) {
+        console.log('failed to load the sound', error);
+        //  Alert.alert('Notice', 'audio file error. (Error code : 1)');
+        this.setState({playState: 'paused'});
+      } else {
+        this.setState({
+          playState: 'playing',
+          duration: this.sound.getDuration(),
+        });
+        this.sound.play(this.playComplete);
+      }
+    });
+  };
+
   playComplete = success => {
     if (this.sound) {
       if (success) {

@@ -42,11 +42,40 @@ const Styles = StyleSheet.create({
     width: widthPercentageToDP(100 / 2) - 25,
 
   },
+  audio_file_icon:{
+   // flex: 1,
+    flexDirection: flexVariable.row,
+    justifyContent: flexVariable.center,
+    alignItems: flexVariable.center,
+    borderWidth: 1,
+    paddingHorizontal: responsiveHorizontalSize(3),
+    paddingVertical: responsiveVerticalSize(3),
+    borderColor: colors.grey,
+    borderRadius: 4
+  },
   fd_row:{
     flex: 1,
     flexDirection: flexVariable.row,
-    justifyContent: flexVariable.spaceBetween,
+    justifyContent: flexVariable.center,
+  },
+  alignItems_center:{
+    alignItems: flexVariable.center
+  },
+  reset:{
+   alignItems: flexVariable.flexEnd,
+  },
+  reset_text:{
+   textAlign: flexVariable.left,
+   fontFamily: fontFamily.segoeuiSemiBold,
+   fontSize: responsiveFontSize(18)
+  },
+  mb_2:{
+    marginBottom: responsiveVerticalSize(2)
+  },
+  text_large: {
+    fontSize: responsiveFontSize(30),
   }
+
 });
 
 export default Styles;

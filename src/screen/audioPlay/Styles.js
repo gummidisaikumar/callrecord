@@ -13,7 +13,8 @@ const Styles = StyleSheet.create({
   viewContainer: {
     flex: 1, 
     justifyContent: flexVariable.center,
-     backgroundColor: colors.black
+     backgroundColor: colors.themeColor,
+     opacity: 0.85,
   },
   speaker_icon:{
     width: 150,

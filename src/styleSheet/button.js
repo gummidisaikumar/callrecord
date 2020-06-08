@@ -62,7 +62,10 @@ const Styles = StyleSheet.create({
     fontSize: responsiveFontSize(16),
     color: colors.white,
     letterSpacing: responsiveFontSize(0.5)
-  }
+  },
+  disabledBtn: {
+    backgroundColor: colors.dimGrey,
+  },
 });
 
 export default Styles;

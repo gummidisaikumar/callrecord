@@ -63,7 +63,7 @@ const Styles = StyleSheet.create({
   },
   listContatiner: {
     marginHorizontal: responsiveHorizontalSize(0.5),
-    marginBottom: heightPercentageToDP(5)
+    //marginBottom: heightPercentageToDP(1.5)
   },
 
   card_container: {

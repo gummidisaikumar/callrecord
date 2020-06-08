@@ -20,8 +20,8 @@ const Styles = StyleSheet.create({
   pv_1: {
     paddingVertical: responsiveVerticalSize(1),
   },
-  pv_4: {
-    paddingVertical: responsiveVerticalSize(4),
+  pv_2: {
+    paddingVertical: responsiveVerticalSize(1),
   },
   pb_2: {
     paddingBottom: responsiveVerticalSize(2),
@@ -57,7 +57,7 @@ const Styles = StyleSheet.create({
     fontFamily: fontFamily.segoeuiSemiBold,
   },
   title_container: {
-    paddingVertical: responsiveVerticalSize(2),
+    paddingVertical: responsiveVerticalSize(1),
   },
   title_text: {
     fontSize: responsiveFontSize(28),

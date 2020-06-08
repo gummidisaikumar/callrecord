@@ -1,17 +1,42 @@
-import {ApiCallGet} from '../ApiConfig/ApiCall';
+import {ApiCallGet, ApiCallPost} from '../ApiConfig/ApiCall';
 import { ApiConfig } from '../ApiConfig/ApiConfig';
 
 const GetFilesService = {
-  getFilesList: async () => {
+  getFilesList: async (data) => {
     const { baseUrl, getFiles} = ApiConfig;
     const url = baseUrl + getFiles;
-     console.log('url', url);
+
+    const params = JSON.stringify({
+      mobile: data.mobile,
+      role: data.role,
+    });
+
     const headers = {
       'Content-Type': 'application/json',
     };
 
-    return ApiCallGet(url, headers);
+    return ApiCallPost(url, params, headers);
   },
+
+  queriesRecord: async (data) => {
+    const {baseUrl, insertRecord} = ApiConfig;
+    const url = baseUrl + insertRecord;
+
+    const headers = {
+      "Content-Type": 'application/json',
+    };
+
+    const params = JSON.stringify({
+       mobile: data.mobile,
+       subject: data.subject,
+       data: {
+         fileName: data.fileName,
+         uri: data.uri,
+       }
+    });
+
+    return ApiCallPost(url, params, headers);
+  }
 };
 
 export default GetFilesService;

@@ -85,6 +85,10 @@ target 'callrecord' do
 
   pod 'RNVoiceRecorder', :path => '../node_modules/react-native-voice-recorder'
 
+  pod 'RNAudioRecord', :path => '../node_modules/react-native-audio-record'
+
+  pod 'RNSoundRecorder', :path => '../node_modules/react-native-sound-recorder'
+
   target 'callrecordTests' do
     inherit! :complete
     # Pods for testing

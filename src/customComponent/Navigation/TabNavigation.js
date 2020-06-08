@@ -37,6 +37,7 @@ const VoiceRecordStackScreen = () => (
       headerStyle: {backgroundColor: colors.themeColor},
     }}>
     <QueriesStack.Screen name={'Record'} component={Queries} />
+    <DashboardStack.Screen name={'AudioPlay'} component={AudioPlay} />
   </QueriesStack.Navigator>
 );
 

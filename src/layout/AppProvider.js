@@ -1,5 +1,6 @@
 import React from 'react';
 import GetSubjectService from '../api/Services/getSubjects';
+import AppAsyncStorage from '../utils/AppAsyncStorage';
 
 export const AppContext = React.createContext({});
 
@@ -8,12 +9,19 @@ export class AppProvider extends React.Component {
     super(props);
     this.state = {
       isLogin: false,
-      token: '',
       subjects: [],
+      mobile: ''
     };
   }
 
-  componentDidMount(){
+  async componentDidMount(){
+   const isLogin = await AppAsyncStorage.get('isLogin');
+
+   if(isLogin){
+     this.setState({
+       isLogin: isLogin,
+     })
+   }
     this.getSubjects();
   }
 

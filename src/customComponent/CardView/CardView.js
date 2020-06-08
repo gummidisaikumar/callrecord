@@ -26,7 +26,10 @@ const CardView = props => {
                           <TouchableOpacity
                             onPress={() =>
                               props.navigation.navigate('AudioPlay', {
-                                fileURL: item.file_url,
+                                type: 'base64',
+                                base64: item[index].data.uri,
+                                fileName: item[index].data.fileName,
+                                recId: item[index].rec_id
                               })
                             }>
                             <View
@@ -34,7 +37,7 @@ const CardView = props => {
                                 Styles.circle_container,
                                 Styles.border_width_2,
                                 [
-                                  item.status === '0'
+                                  item[index].status === 'NOC'
                                     ? Styles.pending_status
                                     : Styles.completed_status,
                                 ],
@@ -50,11 +53,13 @@ const CardView = props => {
                             <TouchableOpacity
                               onPress={() =>
                                 props.navigation.navigate('AudioPlay', {
-                                  fileURL: item.file_url,
+                                  type: 'base64',
+                                  base64: item[index].data.uri,
+                                  fileName: item[index].data.fileName,
                                 })
                               }>
                               <Text style={[Styles.file_text]}>
-                                {`${item.file_name}`}
+                                {`${item[index].data.fileName}`}
                               </Text>
                             </TouchableOpacity>
                             <View
@@ -118,7 +123,7 @@ const CardView = props => {
                             </Menu>
                           </View> */}
                         <TouchableOpacity
-                          onPress={() => props.dialCall(item.mobile)}>
+                          onPress={() => props.dialCall(item[index].mobile)}>
                           <View
                             style={[
                               Styles.phone_container,

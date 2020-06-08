@@ -13,6 +13,8 @@ import CustomInput from '../../customComponent/CustomInput/CustomInput';
 import Styles from './Styles';
 import buttonStyles from '../../styleSheet/button';
 import colors from '../../styleSheet/color';
+import UserService from '../../api/Services/customer';
+import { validPassword, notEqualsZero, email, numberValidation } from '../../utils/Validation';
 
 const genderData = [
   {
@@ -26,13 +28,28 @@ const genderData = [
     isCheck: false,
   },
 ];
+
+const userData = [
+  {
+    name: 'Student',
+    value: 1,
+    isCheck: true,
+  },
+  {
+    name: 'Tutor',
+    value: 2,
+    isCheck: false,
+  },
+];
+
 const Signup = ({navigation}) => {
-  const [userName, setUserName] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [gender, setGender] = useState(genderData);
+  const [userType, setUserType] = useState(userData);
   const [createPassword, setCreatePassword] = useState('');
+  const [emailId, setEmailId] = useState('');
 
   const handleGender = value => {
     let data = [];
@@ -46,6 +63,59 @@ const Signup = ({navigation}) => {
       }
     });
     setGender(data);
+  };
+
+  const handleUserType = value => {
+    let data = [];
+    userType.map(item => {
+      if (item.value === value) {
+        item.isCheck = true;
+        data.push(item);
+      } else {
+        item.isCheck = false;
+        data.push(item);
+      }
+    });
+    setUserType(data);
+  };
+
+  const handleSubmit = async () => {
+    let role = '';
+    let genderValue = '';
+
+    userType.map(item => {
+      if (item.isCheck === true) {
+        role = item.name;
+      }
+    });
+
+    gender.map(item => {
+      if (item.isCheck === true) {
+        genderValue = item.name;
+      }
+    });
+
+    const data = {
+      firstName: firstName,
+      lastName: lastName,
+      role: role,
+      gender: genderValue,
+      mobile: mobileNumber,
+      email: emailId,
+      password: createPassword,
+    };
+
+    await UserService.register(data).then(async result => {
+      if (result.status === 200) {
+        try {
+          navigation.push('Login');
+        } catch (error) {
+          console.log('error', error);
+        }
+      } else {
+        console.log('Network failed');
+      }
+    });
   };
 
   return (
@@ -67,27 +137,32 @@ const Signup = ({navigation}) => {
               <Text style={[Styles.title_text]}>Create Account</Text>
             </View>
             <View>
-              <View style={[Styles.pv_1]}>
-                <CustomInput
-                  isLabel={false}
-                  isInputLabel={false}
-                  placeholder="user name"
-                  onChangeText={text => {
-                    setUserName(text);
-                  }}
-                  placeholderTextColor={colors.dimGrey}
-                  value={userName}
-                  inputProps={{
-                    keyboardType: 'default',
-                    autoCapitalize: 'none',
-                  }}
-                />
+              <View style={[Styles.pv_1, Styles.ph_2]}>
+                <View style={[Styles.flex_1, Styles.fd_row]}>
+                  {userType.map((item, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={[
+                        Styles.fd_row,
+                        Styles.grid_two,
+                        Styles.alignItems_center,
+                      ]}
+                      onPress={() => handleUserType(item.value)}>
+                      <Icon
+                        name={item.isCheck ? 'dot-circle' : 'circle'}
+                        size={20}
+                        color={colors.themeColor}
+                      />
+                      <Text style={[Styles.pl_2]}>{item.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
               </View>
               <View style={[Styles.pv_1]}>
                 <CustomInput
                   isLabel={false}
                   isInputLabel={false}
-                  placeholder="first name"
+                  placeholder="first name*"
                   onChangeText={text => {
                     setFirstName(text);
                   }}
@@ -97,6 +172,7 @@ const Signup = ({navigation}) => {
                     keyboardType: 'default',
                     autoCapitalize: 'none',
                   }}
+                  minLength={2}
                 />
               </View>
               <View style={[Styles.pv_1]}>
@@ -113,12 +189,14 @@ const Signup = ({navigation}) => {
                     keyboardType: 'default',
                     autoCapitalize: 'none',
                   }}
+                  minLength={2}
                 />
               </View>
               <View style={[Styles.pv_1, Styles.ph_2]}>
                 <View style={[Styles.flex_1, Styles.fd_row]}>
                   {gender.map((item, index) => (
-                    <TouchableOpacity key={index}
+                    <TouchableOpacity
+                      key={index}
                       style={[
                         Styles.fd_row,
                         Styles.grid_two,
@@ -127,7 +205,7 @@ const Signup = ({navigation}) => {
                       onPress={() => handleGender(item.value)}>
                       <Icon
                         name={item.isCheck ? 'dot-circle' : 'circle'}
-                        size={26}
+                        size={20}
                         color={colors.themeColor}
                       />
                       <Text style={[Styles.pl_2]}>{item.name}</Text>
@@ -139,23 +217,47 @@ const Signup = ({navigation}) => {
                 <CustomInput
                   isLabel={false}
                   isInputLabel={false}
-                  placeholder="mobile number"
+                  placeholder="mobile number*"
                   onChangeText={text => {
                     setMobileNumber(text);
                   }}
                   placeholderTextColor={colors.dimGrey}
                   value={mobileNumber}
                   inputProps={{
-                    keyboardType: 'default',
+                    keyboardType: 'number-pad',
                     autoCapitalize: 'none',
                   }}
+                  errorStatus={
+                    numberValidation(mobileNumber) !== undefined && notEqualsZero(mobileNumber)
+                  }
+                  errorMessage={numberValidation(mobileNumber)}
                 />
               </View>
               <View style={[Styles.pv_1]}>
                 <CustomInput
                   isLabel={false}
                   isInputLabel={false}
-                  placeholder="create password"
+                  placeholder="emailId*"
+                  onChangeText={text => {
+                    setEmailId(text);
+                  }}
+                  placeholderTextColor={colors.dimGrey}
+                  value={emailId}
+                  inputProps={{
+                    keyboardType: 'email-address',
+                    autoCapitalize: 'none',
+                  }}
+                  errorStatus={
+                    email(emailId) !== undefined && notEqualsZero(emailId)
+                  }
+                  errorMessage={email(emailId)}
+                />
+              </View>
+              <View style={[Styles.pv_1]}>
+                <CustomInput
+                  isLabel={false}
+                  isInputLabel={false}
+                  placeholder="create password*"
                   onChangeText={text => {
                     setCreatePassword(text);
                   }}
@@ -166,24 +268,44 @@ const Signup = ({navigation}) => {
                     autoCapitalize: 'none',
                     secureTextEntry: true,
                   }}
+                  errorStatus={
+                    validPassword(createPassword) !== undefined && notEqualsZero(createPassword)
+                  }
+                  errorMessage={validPassword(createPassword)}
                 />
               </View>
             </View>
             <View>
               <TouchableOpacity
                 style={[buttonStyles.btnPosition]}
-                onPress={() => {
-                  console.log(`loginId :`);
-                }}>
-                  <View style={[buttonStyles.btnContainer]}>
+                disabled={
+                  !createPassword ||
+                  !emailId ||
+                  !(
+                    validPassword(createPassword) == undefined ||
+                    !notEqualsZero(createPassword)
+                  )
+                }
+                onPress={() => handleSubmit()}>
+                <View style={[buttonStyles.btnContainer,
+                    !createPassword || !emailId || !mobileNumber ||
+                    !(validPassword(createPassword) == undefined ||!notEqualsZero(createPassword)) &&
+                    !(email(emailId) !== undefined || !notEqualsZero(emailId)) &&
+                    !(numberValidation(mobileNumber) !== undefined && !notEqualsZero(mobileNumber))
+                      ? buttonStyles.disabledBtn
+                      : '']}>
                   <Text style={[buttonStyles.btn_text]}>Register</Text>
                 </View>
               </TouchableOpacity>
             </View>
-            <View style={[Styles.ph_2, Styles.pv_4]}>
+            <View style={[Styles.ph_2, Styles.pv_2]}>
               <Text style={[Styles.footer_text]}>
                 If you arleady have account?{' '}
-                <Text style={[Styles.text]} onPress={() => navigation.push('Login')}>Login</Text>
+                <Text
+                  style={[Styles.text]}
+                  onPress={() => navigation.push('Login')}>
+                  Login
+                </Text>
               </Text>
             </View>
           </View>

@@ -3,6 +3,7 @@ import play from '../assets/images/ui_play.png';
 import playLeft from '../assets/images/ui_playjumpleft.png';
 import playRight from '../assets/images/ui_playjumpright.png';
 import speaker from '../assets/images/ui_speaker.png';
+import recordIcon from '../assets/images/record_icon.gif';
 
 const application_Constants = {
   pause: pause,
@@ -10,6 +11,7 @@ const application_Constants = {
   playLeft: playLeft,
   playRight: playRight,
   speaker: speaker,
+  recordIcon: recordIcon
 };
 
 

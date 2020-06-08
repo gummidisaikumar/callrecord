@@ -10,6 +10,10 @@ const AppAsyncStorage = {
     // console.log(`get : ${key} = ${result}`);
     return result;
   },
+  clear: async() => {
+    let result = await AsyncStorage.clear();
+    return result;
+  }
 };
 
 export default AppAsyncStorage;
