@@ -6,6 +6,7 @@ import colors from '../../styleSheet/color';
 import buttonStyles from '../../styleSheet/button';
 
 const CardView = props => {
+  console.log(props.role)
   return (
     <View style={[Styles.viewContainer]}>
       {/* <View style={[Styles.pb_2]}>
@@ -27,9 +28,9 @@ const CardView = props => {
                             onPress={() =>
                               props.navigation.navigate('AudioPlay', {
                                 type: 'base64',
-                                base64: item[index].data.uri,
-                                fileName: item[index].data.fileName,
-                                recId: item[index].rec_id
+                                base64: item.data.uri,
+                                fileName: item.data.fileName,
+                                recId: item.rec_id,
                               })
                             }>
                             <View
@@ -37,7 +38,7 @@ const CardView = props => {
                                 Styles.circle_container,
                                 Styles.border_width_2,
                                 [
-                                  item[index].status === 'NOC'
+                                  item.status === 'NOC'
                                     ? Styles.pending_status
                                     : Styles.completed_status,
                                 ],
@@ -54,12 +55,12 @@ const CardView = props => {
                               onPress={() =>
                                 props.navigation.navigate('AudioPlay', {
                                   type: 'base64',
-                                  base64: item[index].data.uri,
-                                  fileName: item[index].data.fileName,
+                                  base64: item.data.uri,
+                                  fileName: item.data.fileName,
                                 })
                               }>
                               <Text style={[Styles.file_text]}>
-                                {`${item[index].data.fileName}`}
+                                {`${item.data.fileName}`}
                               </Text>
                             </TouchableOpacity>
                             <View
@@ -122,17 +123,23 @@ const CardView = props => {
                               </MenuOptions>
                             </Menu>
                           </View> */}
-                        <TouchableOpacity
-                          onPress={() => props.dialCall(item[index].mobile)}>
-                          <View
-                            style={[
-                              Styles.phone_container,
-                              Styles.circle_container,
-                              Styles.phone_circle,
-                            ]}>
-                            <Icon name="phone" size={14} color={colors.white} />
-                          </View>
-                        </TouchableOpacity>
+                        {props.role === 'Tutor' ? (
+                          <TouchableOpacity
+                            onPress={() => props.dialCall(item.mobile)}>
+                            <View
+                              style={[
+                                Styles.phone_container,
+                                Styles.circle_container,
+                                Styles.phone_circle,
+                              ]}>
+                              <Icon
+                                name="phone"
+                                size={14}
+                                color={colors.white}
+                              />
+                            </View>
+                          </TouchableOpacity>
+                        ) : null}
                       </View>
                     </View>
                   </View>

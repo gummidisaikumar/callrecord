@@ -12,6 +12,7 @@ import AudioPlay from '../../screen/audioPlay/AudioPlay';
 import Queries from '../../screen/Queries/Queries';
 import Styles from './Styles';
 import { flexVariable } from '../../styleSheet/flexVariable';
+import { AppContext } from '../../layout/AppProvider';
 
 const DashboardStack = createStackNavigator();
 const ProfileStrack = createStackNavigator();
@@ -52,6 +53,10 @@ const ProfileStrackScreen = () => (
 );
 
 const TabNavigation = () => {
+  const appContext = React.useContext(AppContext);
+  const role = appContext.state.role;
+  console.log('ap', appContext.state.isLogin, appContext.state.role);
+
   return (
     <Tabs.Navigator
       initialRouteName={'Dashboard'}
@@ -90,10 +95,11 @@ const TabNavigation = () => {
         },
       }}>
       <AuthStack.Screen name={'Dashboard'} component={DashboardStackScreen} />
+      {role === 'Student' ?
       <AuthStack.Screen
         name={'Record'}
         component={VoiceRecordStackScreen}
-      />
+      />: null}
       <AuthStack.Screen name={'Profile'} component={ProfileStrackScreen} />
     </Tabs.Navigator>
   );

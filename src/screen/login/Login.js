@@ -41,6 +41,7 @@ const Login = ({navigation}) => {
           if (result.data.statusCode === 1) {
             await appContext.updateValue('isLogin', 'true');
             await appContext.updateValue('mobile', `${loginId}`);
+            await appContext.updateValue('role', `${result.data.role}`);
             await AppAsyncStorage.save('isLogin', 'true');
             await AppAsyncStorage.save('role', `${result.data.role}`);
             await AppAsyncStorage.save('firstName', `${result.data.firstName}`);

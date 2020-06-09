@@ -61,7 +61,7 @@ const Queries = ({navigation}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      reset();
+      // reset();
     }, [reset]),
   );
 

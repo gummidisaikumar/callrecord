@@ -10,7 +10,8 @@ export class AppProvider extends React.Component {
     this.state = {
       isLogin: false,
       subjects: [],
-      mobile: ''
+      mobile: '',
+      role: '',
     };
   }
 
