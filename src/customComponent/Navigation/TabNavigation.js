@@ -38,7 +38,7 @@ const VoiceRecordStackScreen = () => (
       headerStyle: {backgroundColor: colors.themeColor},
     }}>
     <QueriesStack.Screen name={'Record'} component={Queries} />
-    <DashboardStack.Screen name={'AudioPlay'} component={AudioPlay} />
+    <DashboardStack.Screen name={'AudioPlay'} component={AudioPlay}  />
   </QueriesStack.Navigator>
 );
 
@@ -59,7 +59,7 @@ const TabNavigation = () => {
 
   return (
     <Tabs.Navigator
-      initialRouteName={'Dashboard'}
+      initialRouteName="Dashboard"
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           let iconName;

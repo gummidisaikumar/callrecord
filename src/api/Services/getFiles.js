@@ -36,6 +36,22 @@ const GetFilesService = {
     });
 
     return ApiCallPost(url, params, headers);
+  },
+
+  updateStatus: async (data) => {
+    const {baseUrl, updateStatus} = ApiConfig;
+    const url = baseUrl + updateStatus;
+    const headers = {
+      "Content-Type": 'application/json',
+    };
+
+    const params = {
+      mobile: data.mobile,
+      recid: data.recId,
+      status: data.status
+    };
+
+    return ApiCallPost(url, params, headers);
   }
 };
 

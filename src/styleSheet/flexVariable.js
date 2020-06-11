@@ -20,6 +20,7 @@ const flexVariable = {
   spaceAround: 'space-around',
   transparent: 'transparent',
   normal: 'normal',
+  auto: 'auto',
   underline: 'underline',
 };
 

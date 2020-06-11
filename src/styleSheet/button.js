@@ -38,8 +38,7 @@ const Styles = StyleSheet.create({
     borderWidth: responsiveFontSize(1),
     backgroundColor: colors.themeColor,
     borderColor: colors.themeColor,
-    marginTop: responsiveVerticalSize(0.5),
-    
+    marginTop: responsiveVerticalSize(0.5), 
   },
   btn_small_text: {
     fontFamily: fontFamily.segoeuiSemiBold,
@@ -66,6 +65,11 @@ const Styles = StyleSheet.create({
   disabledBtn: {
     backgroundColor: colors.dimGrey,
   },
+  inprogress__btn:{
+    backgroundColor: colors.salmonred,
+    borderColor: colors.salmonred,
+  }
+
 });
 
 export default Styles;

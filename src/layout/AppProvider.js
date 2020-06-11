@@ -17,10 +17,13 @@ export class AppProvider extends React.Component {
 
   async componentDidMount(){
    const isLogin = await AppAsyncStorage.get('isLogin');
-
+   const role = await AppAsyncStorage.get('role');
+   const mobile = await AppAsyncStorage.get('mobile');
    if(isLogin){
      this.setState({
        isLogin: isLogin,
+       role: role,
+       mobile: mobile,
      })
    }
     this.getSubjects();

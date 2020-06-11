@@ -8,6 +8,7 @@ import {
   Button,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
 import CustomInput from '../../customComponent/CustomInput/CustomInput';
 import Styles from './Styles';
@@ -69,7 +70,8 @@ const Login = ({navigation}) => {
           <View>
             <View style={[Styles.logo_container]}>
               <View style={[Styles.logo]}>
-                <Text Styles={[Styles.log_position]} />
+                <Image  source={require('../../assets/images/logo.png')}  style={[Styles.logo_img]}/>
+                {/* <Text Styles={[Styles.log_position]} /> */}
               </View>
             </View>
             <View>
@@ -165,6 +167,9 @@ const Login = ({navigation}) => {
               </Text>
             </View>
           </View>
+        <View style={[Styles.company_info]}>
+          <Text style={[Styles.footer_text, Styles.logo_color]}>Rapid Technologies</Text>
+        </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

@@ -33,8 +33,8 @@ const Profile = () => {
   };
 
   const logout = async() => {
-    await appContext.updateValue('isLogin', false);
     await AppAsyncStorage.clear();
+    await appContext.updateValue('isLogin', false);
   }
 
   return (

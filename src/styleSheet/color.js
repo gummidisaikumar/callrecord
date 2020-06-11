@@ -10,6 +10,8 @@ const colors = {
   lightGrey: '#eee',
   transparent: 'transparent',
   green: 'green',
+  salmonred: '#f97171',
+  blue: '#4bafd8',
 };
 
 export default colors;

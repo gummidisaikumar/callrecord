@@ -6,7 +6,6 @@ import colors from '../../styleSheet/color';
 import buttonStyles from '../../styleSheet/button';
 
 const CardView = props => {
-  console.log(props.role)
   return (
     <View style={[Styles.viewContainer]}>
       {/* <View style={[Styles.pb_2]}>
@@ -19,7 +18,18 @@ const CardView = props => {
             showsVerticalScrollIndicator={false}
             renderItem={({item, index}) => {
               return (
-                <View style={[Styles.card_container]} key={index}>
+                <View
+                  style={[
+                    Styles.card_container,
+                    item.status === 'NOC'
+                      ? Styles.noc_status
+                      : item.status === 'working'
+                      ? Styles.progress
+                      : item.status === 'COMPLETED'
+                      ? Styles.complete
+                      : Styles.noc_status,
+                  ]}
+                  key={index}>
                   <View style={[Styles.boxShadow]}>
                     <View style={[Styles.fd_row, Styles.ph_2, Styles.pv_1]}>
                       <View style={[Styles.gridSection]}>
@@ -63,39 +73,80 @@ const CardView = props => {
                                 {`${item.data.fileName}`}
                               </Text>
                             </TouchableOpacity>
+                            <View>
+                              <Text style={[Styles.text]}>
+                                {`${item.status === 'NOC' ? 'NOT COMPLETE' : item.status === 'working' ? 'IN PROGRESS' : `${item.status}`}`}
+                              </Text>
+                            </View>
                             <View
                               style={[
                                 Styles.gridSection,
                                 Styles.fd_row,
                                 Styles.pt_1,
                               ]}>
-                              <View>
-                                <TouchableOpacity>
-                                  <View
-                                    style={[buttonStyles.btn_small_Container]}>
-                                    <Text style={[buttonStyles.btn_small_text]}>
-                                      Complete
-                                    </Text>
+                              {props.role === 'Tutor' ? (
+                                <View style={{flexDirection: 'row'}}>
+                                  {item.status !== 'working' ?
+                                  <View>
+                                    <TouchableOpacity
+                                      onPress={() => {
+                                        props.itemSatus(item, 'working');
+                                      }}>
+                                      <View
+                                        style={[
+                                          buttonStyles.btn_small_Container,
+                                          buttonStyles.inprogress__btn,
+                                        ]}>
+                                        <Text
+                                          style={[buttonStyles.btn_small_text]}>
+                                          IN PROGRESS
+                                        </Text>
+                                      </View>
+                                    </TouchableOpacity>
                                   </View>
-                                </TouchableOpacity>
-                              </View>
-                              {/* <View style={[Styles.gridSection, Styles.pl_2]}>
-                                  <TouchableOpacity
-                                    onPress={() => props.dialCall(item.mobile)}>
-                                    <View
-                                      style={[
-                                        Styles.phone_container,
-                                        Styles.circle_container,
-                                        Styles.phone_circle,
-                                      ]}>
-                                      <Icon
-                                        name="phone"
-                                        size={14}
-                                        color={colors.white}
-                                      />
+                                  : null}
+                                  <View style={[item.status !== 'working' ? Styles.pl_2 : '']}>
+                                    <TouchableOpacity
+                                      onPress={() => {
+                                        props.itemSatus(item, 'COMPLETED');
+                                      }}>
+                                      <View
+                                        style={[
+                                          buttonStyles.btn_small_Container,
+                                        ]}>
+                                        <Text
+                                          style={[buttonStyles.btn_small_text]}>
+                                          COMPLETE
+                                        </Text>
+                                      </View>
+                                    </TouchableOpacity>
+                                  </View>
+                                </View>
+                              ) : (
+                                <View style={{flexDirection: 'row'}}>
+                                  {item.status !== 'COMPLETED' ? (
+                                    <View>
+                                      <TouchableOpacity
+                                        onPress={() => {
+                                          props.itemSatus(item, 'DELETE');
+                                        }}>
+                                        <View
+                                          style={[
+                                            buttonStyles.btn_small_Container,
+                                            buttonStyles.inprogress__btn,
+                                          ]}>
+                                          <Text
+                                            style={[
+                                              buttonStyles.btn_small_text,
+                                            ]}>
+                                            DELETE
+                                          </Text>
+                                        </View>
+                                      </TouchableOpacity>
                                     </View>
-                                  </TouchableOpacity>
-                                </View> */}
+                                  ) : null}
+                                </View>
+                              )}
                             </View>
                           </View>
                         </View>

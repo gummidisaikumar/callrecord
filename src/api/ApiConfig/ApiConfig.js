@@ -5,6 +5,7 @@ export const ApiConfig = {
     insertRecord: 'api/insertfile.php',
     adduser: 'api/adduser.php',
     login: 'api/login.php',
+    updateStatus: 'api/update.php',
   
     // ============URLs================
     baseUrl: 'http://voice.rapidtechnologies.co.in/',

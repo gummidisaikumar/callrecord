@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {View, Text, Linking, Platform} from 'react-native';
+import {View, Text, Linking, Platform, Alert} from 'react-native';
 import {
   IndicatorViewPager,
   PagerTitleIndicator,
@@ -22,8 +22,10 @@ const Dashboard = ({navigation}) => {
   const appContext = React.useContext(AppContext);
 
   useEffect(() => {
-    getAudioFiles();
-   }, [getAudioFiles]);
+    setTimeout(() => {
+      getAudioFiles();
+    }, 400);
+  }, [getAudioFiles]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -32,7 +34,6 @@ const Dashboard = ({navigation}) => {
   );
 
   const getAudioFiles = async () => {
-    console.log('calling');
     const role = await AppAsyncStorage.get('role');
     const mobile = await AppAsyncStorage.get('mobile');
 
@@ -50,16 +51,20 @@ const Dashboard = ({navigation}) => {
             if (result.data.data.length > 0) {
               result.data.data.map(item => {
                 Object.keys(item).map(function(k) {
-                  console.log('key with value: ' + k);
                   tabArray.push(k);
                   tabData.push(item[k]);
                 });
               });
+              await setData(tabData);
+              await setPageList([...tabArray]);
+              await setIsLoading(true);
+              await setRole(role);
             }
-            await setData(tabData);
-            await setPageList([...tabArray]);
+          } else {
+            await setData([]);
+            await setPageList([]);
             await setIsLoading(true);
-            await setRole(role)
+            await setRole(role);
           }
         } catch (error) {
           console.log('error', error);
@@ -82,6 +87,34 @@ const Dashboard = ({navigation}) => {
       }
       Linking.openURL(phoneNumber);
     }
+  };
+
+  const handleStatus = async (item, status) => {
+    const data = {
+      mobile: item.mobile,
+      recId: item.rec_id,
+      status: status,
+    };
+    await GetFilesService.updateStatus(data).then(async result => {
+      if (result.status === 200) {
+        try {
+          if (result.data.statusCode === 1) {
+            await getAudioFiles();
+            Alert.alert(
+              `${
+                status === 'DELETE'
+                  ? 'Deleted successfully'
+                  : 'status updated successfully'
+              }`,
+            );
+          }
+        } catch (error) {
+          console.log('error', error);
+        }
+      } else {
+        console.log('Network failed');
+      }
+    });
   };
 
   const _renderTitleIndicator = () => {
@@ -110,6 +143,7 @@ const Dashboard = ({navigation}) => {
                 dialCall={number => dialCall(number)}
                 navigation={navigation}
                 subjectList={subjectList}
+                itemSatus={(item, status) => handleStatus(item, status)}
                 role={role}
               />
             </View>

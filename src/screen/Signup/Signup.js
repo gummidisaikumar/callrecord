@@ -7,6 +7,7 @@ import {
   Text,
   Button,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import CustomInput from '../../customComponent/CustomInput/CustomInput';
@@ -108,7 +109,11 @@ const Signup = ({navigation}) => {
     await UserService.register(data).then(async result => {
       if (result.status === 200) {
         try {
-          navigation.push('Login');
+          if(result.data.statusCode === 1){
+            console.log(result.data);
+            Alert.alert(`${result.data.message}`)
+            navigation.push('Login');
+          }
         } catch (error) {
           console.log('error', error);
         }

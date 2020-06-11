@@ -38,9 +38,10 @@ const Styles = StyleSheet.create({
   logo: {
     width: 120,
     height: 120,
-    borderRadius: 120 / 2,
-    backgroundColor: colors.themeColor,
-    marginVertical: responsiveVerticalSize(1),
+    //borderRadius: 120 / 2,
+    //borderWidth: 1,
+    //borderColor: colors.blue,
+    marginVertical: responsiveVerticalSize(0.35),
   },
   text:{ 
     textDecorationLine: flexVariable.underline,
@@ -55,6 +56,24 @@ const Styles = StyleSheet.create({
     fontSize: responsiveFontSize(14),
     fontFamily: fontFamily.segoeuiSemiBold,
     textAlign: flexVariable.center
+  },
+  company_info:{
+    position: flexVariable.absolute, 
+    bottom: 4, 
+    left: 0, 
+    right: 0, 
+    margin: flexVariable.auto
+  },
+  logo_color:{
+    fontSize: responsiveFontSize(16),
+    color: colors.blue,
+  },
+  logo_img: {
+    width: 120,
+    height: 120,
+    borderRadius: 120 / 2,
+    resizeMode: 'contain',
+ //   objectFit: 'contain'
   }
 });
 

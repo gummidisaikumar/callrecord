@@ -182,6 +182,18 @@ const Styles = StyleSheet.create({
   },
   bg_themeColor:{
     backgroundColor: colors.themeColor
+  },
+  noc_status: {
+    borderRightWidth: 3,
+    borderRightColor: colors.grey,
+  },
+  progress: {
+    borderRightWidth: 3,
+    borderRightColor: colors.salmonred,
+  },
+  complete:{
+    borderRightWidth: 3,
+    borderRightColor: colors.green,
   }
 });
 

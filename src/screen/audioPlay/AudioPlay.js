@@ -75,18 +75,19 @@ class AudioPlay extends React.Component {
     } else {
       const base64 = this.props.route.params.base64;
       const name = this.props.route.params.fileName;
-      const path = RNFS.DocumentDirectoryPath + `/${name}`;
-      console.log('path', path);
-      if (RNFS.exists(path)) {
-        console.log('Exitspath', path);
+
+      const path = RNFS.CachesDirectoryPath + `/${name}.mp3`;
+      // console.log('path', path);
+      // if (RNFS.exists(path)) {
+      //   console.log('Exitspath', path);
+      //   this.playingAudio(path);
+      // } else {
+      RNFS.writeFile(path, base64, 'base64').then(() => playSound());
+      const playSound = () => {
+        console.log('newpath', path);
         this.playingAudio(path);
-      } else {
-        RNFS.writeFile(path, base64, 'base64').then(() => playSound());
-        const playSound = () => {
-          console.log('newpath', path);
-          this.playingAudio(path);
-        };
-      }
+        // };
+      };
     }
   };
 
@@ -166,7 +167,8 @@ class AudioPlay extends React.Component {
     return (
       <View style={[Styles.viewContainer]}>
         <Image
-          source={application_Constants.speaker}
+         // source={application_Constants.speaker}
+          source={require('../../assets/images/ui_speaker.png')}
           style={[Styles.speaker_icon]}
         />
         <View style={[Styles.skip_contianer]}>
@@ -174,7 +176,8 @@ class AudioPlay extends React.Component {
             onPress={this.jumpPrev15Seconds}
             style={[Styles.justify_center]}>
             <Image
-              source={application_Constants.playLeft}
+             // source={application_Constants.playLeft}
+              source={require('../../assets/images/ui_playjumpleft.png')}
               style={[Styles.icon_width]}
             />
             <Text style={[Styles.skip_text]}>15</Text>
@@ -182,7 +185,8 @@ class AudioPlay extends React.Component {
           {this.state.playState == 'playing' && (
             <TouchableOpacity onPress={this.pause} style={[Styles.mh_3]}>
               <Image
-                source={application_Constants.pause}
+                //source={application_Constants.pause}
+                source={require('../../assets/images/ui_pause.png')}
                 style={[Styles.icon_width]}
               />
             </TouchableOpacity>
@@ -190,7 +194,8 @@ class AudioPlay extends React.Component {
           {this.state.playState == 'paused' && (
             <TouchableOpacity onPress={this.play} style={[Styles.mh_3]}>
               <Image
-                source={application_Constants.play}
+               // source={application_Constants.play}
+                source={require('../../assets/images/ui_play.png')}
                 style={[Styles.icon_width]}
               />
             </TouchableOpacity>
@@ -199,7 +204,8 @@ class AudioPlay extends React.Component {
             onPress={this.jumpNext15Seconds}
             style={[Styles.justify_center]}>
             <Image
-              source={application_Constants.playRight}
+             // source={application_Constants.playRight}
+              source={require('../../assets/images/ui_playjumpright.png')}
               style={[Styles.icon_width]}
             />
             <Text style={[Styles.skip_text]}>15</Text>
