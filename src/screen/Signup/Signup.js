@@ -15,7 +15,13 @@ import Styles from './Styles';
 import buttonStyles from '../../styleSheet/button';
 import colors from '../../styleSheet/color';
 import UserService from '../../api/Services/customer';
-import { validPassword, notEqualsZero, email, numberValidation } from '../../utils/Validation';
+import {
+  validPassword,
+  notEqualsZero,
+  email,
+  numberValidation,
+} from '../../utils/Validation';
+import Loading from '../../customComponent/loading/Loading';
 
 const genderData = [
   {
@@ -51,6 +57,7 @@ const Signup = ({navigation}) => {
   const [userType, setUserType] = useState(userData);
   const [createPassword, setCreatePassword] = useState('');
   const [emailId, setEmailId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGender = value => {
     let data = [];
@@ -81,6 +88,7 @@ const Signup = ({navigation}) => {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     let role = '';
     let genderValue = '';
 
@@ -109,16 +117,19 @@ const Signup = ({navigation}) => {
     await UserService.register(data).then(async result => {
       if (result.status === 200) {
         try {
-          if(result.data.statusCode === 1){
+          if (result.data.statusCode === 1) {
             console.log(result.data);
-            Alert.alert(`${result.data.message}`)
+            Alert.alert(`${result.data.message}`);
+            setIsLoading(false);
             navigation.push('Login');
           }
         } catch (error) {
           console.log('error', error);
+          setIsLoading(false);
         }
       } else {
         console.log('Network failed');
+        setIsLoading(false);
       }
     });
   };
@@ -233,7 +244,8 @@ const Signup = ({navigation}) => {
                     autoCapitalize: 'none',
                   }}
                   errorStatus={
-                    numberValidation(mobileNumber) !== undefined && notEqualsZero(mobileNumber)
+                    numberValidation(mobileNumber) !== undefined &&
+                    notEqualsZero(mobileNumber)
                   }
                   errorMessage={numberValidation(mobileNumber)}
                 />
@@ -274,7 +286,8 @@ const Signup = ({navigation}) => {
                     secureTextEntry: true,
                   }}
                   errorStatus={
-                    validPassword(createPassword) !== undefined && notEqualsZero(createPassword)
+                    validPassword(createPassword) !== undefined &&
+                    notEqualsZero(createPassword)
                   }
                   errorMessage={validPassword(createPassword)}
                 />
@@ -292,13 +305,26 @@ const Signup = ({navigation}) => {
                   )
                 }
                 onPress={() => handleSubmit()}>
-                <View style={[buttonStyles.btnContainer,
-                    !createPassword || !emailId || !mobileNumber ||
-                    !(validPassword(createPassword) == undefined ||!notEqualsZero(createPassword)) &&
-                    !(email(emailId) !== undefined || !notEqualsZero(emailId)) &&
-                    !(numberValidation(mobileNumber) !== undefined && !notEqualsZero(mobileNumber))
+                <View
+                  style={[
+                    buttonStyles.btnContainer,
+                    !createPassword ||
+                    !emailId ||
+                    !mobileNumber ||
+                    (!(
+                      validPassword(createPassword) == undefined ||
+                      !notEqualsZero(createPassword)
+                    ) &&
+                      !(
+                        email(emailId) !== undefined || !notEqualsZero(emailId)
+                      ) &&
+                      !(
+                        numberValidation(mobileNumber) !== undefined &&
+                        !notEqualsZero(mobileNumber)
+                      ))
                       ? buttonStyles.disabledBtn
-                      : '']}>
+                      : '',
+                  ]}>
                   <Text style={[buttonStyles.btn_text]}>Register</Text>
                 </View>
               </TouchableOpacity>
@@ -315,6 +341,7 @@ const Signup = ({navigation}) => {
             </View>
           </View>
         </View>
+        {isLoading ? <Loading /> : null}
       </ScrollView>
     </KeyboardAvoidingView>
   );

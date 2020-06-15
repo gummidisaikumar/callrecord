@@ -12,6 +12,8 @@ import CardView from '../../customComponent/CardView/CardView';
 import colors from '../../styleSheet/color';
 import Loading from '../../customComponent/loading/Loading';
 import AppAsyncStorage from '../../utils/AppAsyncStorage';
+import {statusData, studentStatusDropdownData} from '../../utils/DropdownData';
+import ConfirmationDialog from '../../customComponent/CustomDialog/ConfirmationDialog';
 
 const Dashboard = ({navigation}) => {
   const [data, setData] = useState([]);
@@ -19,6 +21,12 @@ const Dashboard = ({navigation}) => {
   const [role, setRole] = useState('');
   const [pageList, setPageList] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [statusList, setStatusList] = useState(statusData);
+  const [isModal, setIsModal] = useState(false);
+  data;
+  const [status, setStatus] = useState('');
+  const [item, setItem] = useState('');
+
   const appContext = React.useContext(AppContext);
 
   useEffect(() => {
@@ -34,47 +42,53 @@ const Dashboard = ({navigation}) => {
   );
 
   const getAudioFiles = async () => {
+    setIsLoading(true);
     const role = await AppAsyncStorage.get('role');
     const mobile = await AppAsyncStorage.get('mobile');
+    if (role !== '' && mobile !== '') {
+      const data = {
+        mobile: mobile,
+        role: role,
+      };
 
-    const data = {
-      mobile: mobile,
-      role: role,
-    };
-
-    await GetFilesService.getFilesList(data).then(async result => {
-      if (result.status === 200) {
-        try {
-          if (result.data.statusCode === 1) {
-            let tabArray = [];
-            let tabData = [];
-            if (result.data.data.length > 0) {
-              result.data.data.map(item => {
-                Object.keys(item).map(function(k) {
-                  tabArray.push(k);
-                  tabData.push(item[k]);
+      await GetFilesService.getFilesList(data).then(async result => {
+        if (result.status === 200) {
+          try {
+            if (result.data.statusCode === 1) {
+              let tabArray = [];
+              let tabData = [];
+              if (result.data.data.length > 0) {
+                result.data.data.map(item => {
+                  Object.keys(item).map(function(k) {
+                    tabArray.push(k);
+                    tabData.push(item[k]);
+                  });
                 });
-              });
-              await setData(tabData);
-              await setPageList([...tabArray]);
+                await setData(tabData);
+                await setPageList([...tabArray]);
+                await setIsLoading(true);
+                await setRole(role);
+                setIsLoading(false);
+              }
+            } else {
+              await setData([]);
+              await setPageList([]);
               await setIsLoading(true);
               await setRole(role);
+              setIsLoading(false);
             }
-          } else {
-            await setData([]);
-            await setPageList([]);
-            await setIsLoading(true);
-            await setRole(role);
+          } catch (error) {
+            console.log('error', error);
+            setIsLoading(false);
           }
-        } catch (error) {
-          console.log('error', error);
-          setIsLoading(true);
+        } else {
+          console.log('Network failed');
+          setIsLoading(false);
         }
-      } else {
-        console.log('Network failed');
-        setIsLoading(true);
-      }
-    });
+      });
+    } else {
+      setIsLoading(false);
+    }
   };
 
   const dialCall = number => {
@@ -117,6 +131,22 @@ const Dashboard = ({navigation}) => {
     });
   };
 
+  const handleStatusSelect = (item, name) => {
+    console.log('name', name);
+    setIsModal(true);
+    setStatus(name);
+    setItem(item);
+  };
+
+  const closeDialog = () => {
+    setIsModal(false);
+  };
+
+  const confirmDialog = async () => {
+    setIsModal(false);
+    await handleStatus(item, status);
+  };
+
   const _renderTitleIndicator = () => {
     return (
       <PagerTitleIndicator
@@ -144,6 +174,12 @@ const Dashboard = ({navigation}) => {
                 navigation={navigation}
                 subjectList={subjectList}
                 itemSatus={(item, status) => handleStatus(item, status)}
+                handleStatusSelect={(item, name) =>
+                  handleStatusSelect(item, name)
+                }
+                statusData={
+                  role === 'Tutor' ? statusList : studentStatusDropdownData
+                }
                 role={role}
               />
             </View>
@@ -151,9 +187,17 @@ const Dashboard = ({navigation}) => {
         </IndicatorViewPager>
       ) : (
         <View style={[Styles.viewContainer]}>
-          <Text>No record found</Text>
+          {isLoading ? <Loading /> : <Text>No record found</Text>}
         </View>
       )}
+      {isModal ? (
+        <ConfirmationDialog
+          isShow={true}
+          closeDialog={closeDialog}
+          confirmDialog={confirmDialog}
+          cancelDialog={closeDialog}
+        />
+      ) : null}
     </View>
   );
 };

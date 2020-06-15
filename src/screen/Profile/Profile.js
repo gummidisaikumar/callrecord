@@ -4,7 +4,8 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Styles from './Styles';
 import colors from '../../styleSheet/color';
 import AppAsyncStorage from '../../utils/AppAsyncStorage';
-import { AppContext } from '../../layout/AppProvider';
+import {AppContext} from '../../layout/AppProvider';
+import Loading from '../../customComponent/loading/Loading';
 
 const Profile = () => {
   const [firstName, setFirstName] = useState('');
@@ -32,16 +33,16 @@ const Profile = () => {
     setGender(gender);
   };
 
-  const logout = async() => {
+  const logout = async () => {
     await AppAsyncStorage.clear();
     await appContext.updateValue('isLogin', false);
-  }
+  };
 
   return (
     <View style={[Styles.viewContainer]}>
       <View style={{alignItems: 'flex-end'}}>
-        <TouchableOpacity onPress={() =>logout()}>
-        <Icon name={'sign-out-alt'} size={25} color={colors.themeColor} />
+        <TouchableOpacity onPress={() => logout()}>
+          <Icon name={'sign-out-alt'} size={25} color={colors.themeColor} />
         </TouchableOpacity>
       </View>
       <View style={[Styles.profile_position]}>

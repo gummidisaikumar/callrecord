@@ -86,7 +86,7 @@ const Styles = StyleSheet.create({
   text: {
     fontFamily: fontFamily.segoeuiSemiBold,
     color: colors.suvaGrey,
-    fontSize: responsiveFontSize(14),
+    fontSize: responsiveFontSize(12),
   },
   gridSection: {
     width: widthPercentageToDP(100 / 2),
@@ -151,7 +151,7 @@ const Styles = StyleSheet.create({
   dots:{
     flexDirection: flexVariable.row,
     justifyContent: flexVariable.flexEnd, 
-    paddingHorizontal: responsiveHorizontalSize(1),
+    paddingHorizontal: responsiveHorizontalSize(2),
     paddingVertical: responsiveVerticalSize(1),
    //backgroundColor: 'red',
   },
@@ -166,6 +166,9 @@ const Styles = StyleSheet.create({
   },
   color_black:{
     color: colors.black
+  },
+  color_white:{
+    color: colors.white
   },
   txt_medium:{
     fontSize: responsiveFontSize(14),
@@ -194,6 +197,10 @@ const Styles = StyleSheet.create({
   complete:{
     borderRightWidth: 3,
     borderRightColor: colors.green,
+  },
+  menu_options:{
+    backgroundColor:colors.themeColor,
+    paddingVertical: responsiveVerticalSize(0.5),
   }
 });
 

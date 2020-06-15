@@ -1,9 +1,18 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+  MenuProvider,
+  renderers,
+} from 'react-native-popup-menu';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Styles from '../../screen/dashboard/Styles';
 import colors from '../../styleSheet/color';
 import buttonStyles from '../../styleSheet/button';
+const {ContextMenu} = renderers;
 
 const CardView = props => {
   return (
@@ -73,10 +82,45 @@ const CardView = props => {
                                 {`${item.data.fileName}`}
                               </Text>
                             </TouchableOpacity>
-                            <View>
-                              <Text style={[Styles.text]}>
-                                {`${item.status === 'NOC' ? 'NOT COMPLETE' : item.status === 'working' ? 'IN PROGRESS' : `${item.status}`}`}
-                              </Text>
+                            <View style={[Styles.fd_row]}>
+                              <View
+                                style={{
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                }}>
+                                <Text style={[Styles.text]}>
+                                  {`Status: ${
+                                    item.status === 'NOC'
+                                      ? 'NOT COMPLETE'
+                                      : item.status === 'working'
+                                      ? 'WORKING'
+                                      : `${item.status}`
+                                  }`}
+                                </Text>
+                              </View>
+                              <View style={[Styles.pl_2]}>
+                                <View>
+                                  {props.role === 'Tutor' ? (
+                                    <TouchableOpacity
+                                      onPress={() =>
+                                        props.dialCall(item.mobile)
+                                      }>
+                                      <View
+                                        style={[
+                                          Styles.phone_container,
+                                          Styles.circle_container,
+                                          Styles.phone_circle,
+                                        ]}>
+                                        <Icon
+                                          name="phone"
+                                          size={14}
+                                          color={colors.white}
+                                        />
+                                      </View>
+                                    </TouchableOpacity>
+                                  ) : null}
+                                </View>
+                              </View>
                             </View>
                             <View
                               style={[
@@ -84,28 +128,35 @@ const CardView = props => {
                                 Styles.fd_row,
                                 Styles.pt_1,
                               ]}>
-                              {props.role === 'Tutor' ? (
+                              {/* {props.role === 'Tutor' ? (
                                 <View style={{flexDirection: 'row'}}>
-                                  {item.status !== 'working' ?
-                                  <View>
-                                    <TouchableOpacity
-                                      onPress={() => {
-                                        props.itemSatus(item, 'working');
-                                      }}>
-                                      <View
-                                        style={[
-                                          buttonStyles.btn_small_Container,
-                                          buttonStyles.inprogress__btn,
-                                        ]}>
-                                        <Text
-                                          style={[buttonStyles.btn_small_text]}>
-                                          IN PROGRESS
-                                        </Text>
-                                      </View>
-                                    </TouchableOpacity>
-                                  </View>
-                                  : null}
-                                  <View style={[item.status !== 'working' ? Styles.pl_2 : '']}>
+                                  {item.status !== 'working' ? (
+                                    <View>
+                                      <TouchableOpacity
+                                        onPress={() => {
+                                          props.itemSatus(item, 'working');
+                                        }}>
+                                        <View
+                                          style={[
+                                            buttonStyles.btn_small_Container,
+                                            buttonStyles.inprogress__btn,
+                                          ]}>
+                                          <Text
+                                            style={[
+                                              buttonStyles.btn_small_text,
+                                            ]}>
+                                            IN PROGRESS
+                                          </Text>
+                                        </View>
+                                      </TouchableOpacity>
+                                    </View>
+                                  ) : null}
+                                  <View
+                                    style={[
+                                      item.status !== 'working'
+                                        ? Styles.pl_2
+                                        : '',
+                                    ]}>
                                     <TouchableOpacity
                                       onPress={() => {
                                         props.itemSatus(item, 'COMPLETED');
@@ -146,51 +197,58 @@ const CardView = props => {
                                     </View>
                                   ) : null}
                                 </View>
-                              )}
+                              )} */}
                             </View>
                           </View>
                         </View>
                       </View>
-                      <View style={[Styles.gridSection, Styles.phone_position]}>
+                      <View style={[Styles.phone_position]}>
+                        <Menu>
+                          <MenuTrigger style={[Styles.dots]}>
+                            <Icon
+                              name="ellipsis-v"
+                              size={20}
+                              color={colors.dimGrey}
+                            />
+                          </MenuTrigger>
+                          <MenuOptions style={Styles.menu_options}>
+                            {props.statusData.map((data, index) => (
+                              <MenuOption
+                                onSelect={() =>
+                                  props.handleStatusSelect(item, data.label)
+                                }>
+                                <Text
+                                  style={[
+                                    Styles.text,
+                                    Styles.txt_medium,
+                                    Styles.color_white,
+                                  ]}>
+                                  {data.label}
+                                </Text>
+                              </MenuOption>
+                            ))}
+                          </MenuOptions>
+                        </Menu>
                         {/* <View>
-                            <Menu>
-                              <MenuTrigger style={[Styles.dots]}>
-                                <Icon
-                                  name="ellipsis-v"
-                                  size={20}
-                                  color={colors.dimGrey}
-                                />
-                              </MenuTrigger>
-                              <MenuOptions>
-                                {props.subjectList.map((item, index) => (
-                                  <MenuOption
-                                    onSelect={() => alert(item.subject_id)}>
-                                    <Text
-                                      style={[Styles.text, Styles.txt_medium]}>
-                                      {item.subj_name}
-                                    </Text>
-                                  </MenuOption>
-                                ))}
-                              </MenuOptions>
-                            </Menu>
-                          </View> */}
-                        {props.role === 'Tutor' ? (
-                          <TouchableOpacity
-                            onPress={() => props.dialCall(item.mobile)}>
-                            <View
-                              style={[
-                                Styles.phone_container,
-                                Styles.circle_container,
-                                Styles.phone_circle,
-                              ]}>
-                              <Icon
-                                name="phone"
-                                size={14}
-                                color={colors.white}
-                              />
-                            </View>
-                          </TouchableOpacity>
-                        ) : null}
+                            {props.role === 'Tutor' ? (
+                              <TouchableOpacity
+                                onPress={() => props.dialCall(item.mobile)}>
+                                <View
+                                  style={[
+                                    Styles.phone_container,
+                                    Styles.circle_container,
+                                    Styles.phone_circle,
+                                  ]}>
+                                  <Icon
+                                    name="phone"
+                                    size={14}
+                                    color={colors.white}
+                                  />
+                                </View>
+                              </TouchableOpacity>
+                            ) : null}
+                          </View>
+                         */}
                       </View>
                     </View>
                   </View>

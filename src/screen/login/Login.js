@@ -22,13 +22,16 @@ import {
   validPassword,
   numberValidation,
 } from '../../utils/Validation';
+import Loading from '../../customComponent/loading/Loading';
 
 const Login = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [loginId, setLoginId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const appContext = React.useContext(AppContext);
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     const data = {
       mobile: loginId,
       password: password,
@@ -49,14 +52,18 @@ const Login = ({navigation}) => {
             await AppAsyncStorage.save('lastName', `${result.data.lastName}`);
             await AppAsyncStorage.save('mobile', `${loginId}`);
             await AppAsyncStorage.save('gender', `${result.data.gender}`);
+            setIsLoading(false);
           } else {
             Alert.alert(`login failed`);
+            setIsLoading(false);
           }
         } catch (error) {
           console.log('error', error);
+          setIsLoading(false);
         }
       } else {
         console.log('Network failed');
+        setIsLoading(false);
       }
     });
   };
@@ -70,7 +77,10 @@ const Login = ({navigation}) => {
           <View>
             <View style={[Styles.logo_container]}>
               <View style={[Styles.logo]}>
-                <Image  source={require('../../assets/images/logo.png')}  style={[Styles.logo_img]}/>
+                <Image
+                  source={require('../../assets/images/logo.png')}
+                  style={[Styles.logo_img]}
+                />
                 {/* <Text Styles={[Styles.log_position]} /> */}
               </View>
             </View>
@@ -167,10 +177,13 @@ const Login = ({navigation}) => {
               </Text>
             </View>
           </View>
-        <View style={[Styles.company_info]}>
-          <Text style={[Styles.footer_text, Styles.logo_color]}>Rapid Technologies</Text>
+          <View style={[Styles.company_info]}>
+            <Text style={[Styles.footer_text, Styles.logo_color]}>
+              Rapid Technologies
+            </Text>
+          </View>
         </View>
-        </View>
+        {isLoading ? <Loading /> : null}
       </ScrollView>
     </KeyboardAvoidingView>
   );

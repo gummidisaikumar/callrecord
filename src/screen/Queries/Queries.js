@@ -24,6 +24,8 @@ import GetFilesService from '../../api/Services/getFiles';
 import colors from '../../styleSheet/color';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import AppAsyncStorage from '../../utils/AppAsyncStorage';
+import Loading from '../../customComponent/loading/Loading';
+
 
 //let recordingPath;
 const getGalleryAccessPermission = async () => {
@@ -58,6 +60,8 @@ const Queries = ({navigation}) => {
   const [isModal, setIsModal] = useState(false);
   const {SlideInMenu} = renderers;
   const appContext = React.useContext(AppContext);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
     getGalleryAccessPermission();
@@ -105,6 +109,7 @@ const Queries = ({navigation}) => {
   };
 
   const handleSubmit = async navigation => {
+    setIsLoading(true)
     const data = {
       mobile: mobile,
       subject: subject,
@@ -118,11 +123,14 @@ const Queries = ({navigation}) => {
         if (result.status === 200) {
           try {
             await reset();
+            setIsLoading(false)
             navigation.navigate('Dashboard', {screen: 'Dashboard'});
           } catch (error) {
+            setIsLoading(false)
             console.log('error', error);
           }
         } else {
+          setIsLoading(false)
           Alert.alert('Network failed');
         }
       })
@@ -143,7 +151,6 @@ const Queries = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
-      <MenuProvider>
         <View style={[Styles.viewContainer]}>
           <View style={[Styles.mb_2, Styles.reset]}>
             <TouchableOpacity onPress={reset}>
@@ -259,7 +266,7 @@ const Queries = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
-      </MenuProvider>
+      {isLoading ? <Loading /> : null}
     </View>
   );
 };

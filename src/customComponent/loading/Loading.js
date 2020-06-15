@@ -1,19 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import {ActivityIndicator, View} from 'react-native';
-import colors from '../../styleSheet/color';
+import React from 'react';
+import {View} from 'react-native';
+import styles from './Styles';
+import {BallIndicator} from 'react-native-indicators';
 
-const Loading = () => {
-  return (
-    <View
-      style={{
-        height: '100%',
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <ActivityIndicator size="large" color={colors.themeColor} />
-    </View>
-  );
-};
+const Loader = () => (
+  <View style={styles.progressBarContainer}>
+    <BallIndicator
+      color={`${styles.progressBarColor.color}`}
+      animationDuration={500}
+    />
+  </View>
+);
 
-export default Loading;
+export default Loader;

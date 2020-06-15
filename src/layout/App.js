@@ -6,7 +6,7 @@ import Splash from '../screen/Splash/Splash';
 import {AppProvider, AppContext} from './AppProvider';
 import TabNavigation from '../customComponent/Navigation/TabNavigation';
 import AuthNavigation from '../customComponent/Navigation/AuthNavigation';
-
+import { MenuProvider } from 'react-native-popup-menu';
 
 
 const App = () => {
@@ -23,15 +23,16 @@ const App = () => {
   }
 
   return (
-    
     <AppProvider>
       <StatusBar backgroundColor={colors.themeColor} />
       <AppContext.Consumer>
         {context =>
           context.state.isLogin ?(
+            <MenuProvider>
             <NavigationContainer>
               <TabNavigation />
             </NavigationContainer>
+            </MenuProvider>
           ) : (
             <NavigationContainer>
               <AuthNavigation />
