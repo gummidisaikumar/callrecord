@@ -23,6 +23,7 @@ const App = () => {
   }
 
   return (
+    
     <AppProvider>
       <StatusBar backgroundColor={colors.themeColor} />
       <AppContext.Consumer>
